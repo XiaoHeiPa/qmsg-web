@@ -14,14 +14,14 @@
             let value = textField.value;
             let encrypted = document.querySelector(".is-encrypted")
             let protocol;
-            if (encrypted.value) {
+            if (encrypted.selected) {
                 protocol = "https://"
             } else {
                 protocol = "http://"
             }
             fetch(protocol + value).then(() => {
                 localStorage.setItem("server", value);
-                localStorage.setItem("encrypted", encrypted.toString());
+                localStorage.setItem("encrypted", encrypted.selected.toString());
                 window.open("index.html", "_self");
             }).catch(() => {
                 dialog.open = true
@@ -43,6 +43,7 @@
 
 <mdui-card class="login-card" variant="filled" style="width: 600px;height: 400px">
     <h2 style="text-align: left;padding: 1.2rem">QMessenger Server</h2>
+    <p>TIP: You must have encrypted connection on Google Chrome.</p>
     <mdui-text-field class="login-text-field" style="width: 50%" label="Server address"
                      helper="Example: qmsg.dev; Lock Icon: use https/wss" helper-on-focus>
         <mdui-button-icon slot="icon" icon="dns"></mdui-button-icon>

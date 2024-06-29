@@ -99,6 +99,27 @@
         if (token === null) {
             console.log("Call login");
             loginDialog.open = true;
+        } else {
+            processMessenger(token, encrypted.value === "true", host)
+        }
+    }
+
+    function processMessenger(token, encrypted, host) {
+        let protocol;
+        if (encrypted) {
+            protocol = "wss://"
+        } else {
+            protocol = "ws://"
+        }
+        try {
+            let ws = new WebSocket(`${protocol}${token}@${host}/ws/messenger`);
+            ws.onopen(() => {
+                alert("connected")
+            })
+        } catch (e) {
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.reload();
         }
     }
 </script>
