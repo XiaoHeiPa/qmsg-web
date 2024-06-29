@@ -47,7 +47,7 @@
     <mdui-text-field class="login-text-field" style="width: 50%" label="Server address"
                      helper="Example: qmsg.dev; Lock Icon: use https/wss" helper-on-focus>
         <mdui-button-icon slot="icon" icon="dns"></mdui-button-icon>
-        <mdui-button-icon class="is-encrypted" selectable icon="lock" slot="end-icon" onClick="document.querySelector('.encrypt-snackbar').open = true"></mdui-button-icon>
+        <mdui-button-icon selected class="is-encrypted" selectable icon="lock" slot="end-icon" onClick="document.querySelector('.encrypt-snackbar').open = true"></mdui-button-icon>
     </mdui-text-field>
     <br>
     <mdui-button end-icon="arrow_forward" onClick="checkServer()">
