@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" class="mdui-theme-auto">
+<head>
+    <meta charset="UTF-8">
+    <title>QvQ Messenger WebClient</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/mdui@2/mdui.css">
+    <script src="https://unpkg.com/mdui@2/mdui.global.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+<mdui-dialog class="login-dialog">
+    <h2>Please Log in</h2>
+    <br>
+    <mdui-text-field class="username-text-field" label="Username">
+        <mdui-button-icon slot="icon" icon="person"></mdui-button-icon>
+    </mdui-text-field>
+    <label>&nbsp;</label>
+    <mdui-text-field class="password-text-field" label="Password" type="password" toggle-password>
+        <mdui-button-icon slot="icon" icon="key"></mdui-button-icon>
+    </mdui-text-field>
+    <br>
+    <p></p>
+    <mdui-button class="login-dialog-login">
+        Login
+        <mdui-icon slot="end-icon" name="login"></mdui-icon>
+    </mdui-button>
+</mdui-dialog>
+<mdui-dialog fullscreen class="select-server-dialog">
+    <h2>选择服务器</h2>
+    <br>
+    <p>你的浏览器阻止了该页面弹出其他页面, 请允许弹出窗口.</p>
+    <p>如果仍然无法打开请在我们的GitHub提出issue.</p>
+    <p>不要使用国产系统自带的杂牌浏览器, 这边建议使用Chrome或者Firefox</p>
+    <mdui-button href="select-server.html">点击此处手动打开链接</mdui-button>
+    <br>
+</mdui-dialog>
+
+<script>
+    const loginDialog = document.querySelector(".login-dialog");
+    const loginButton = loginDialog.querySelector(".login-dialog-login");
+    const usernameField = loginDialog.querySelector(".username-text-field");
+    const passwordField = loginDialog.querySelector(".password-text-field");
+
+    loginButton.addEventListener("click", () => {
+        loginButton.setAttribute("loading", "")
+        loginDialog.setAttribute("disabled", "")
+        // loginDialog.open = false
+        let host = localStorage.getItem("server");
+        let encrypted = localStorage.getItem("encrypted")
+        let protocol;
+        if (encrypted.value === "true") {
+            protocol = "https://"
+        } else {
+            protocol = "http://"
+        }
+        const username = usernameField.value;
+        const password = passwordField.value;
+
+        let httpRequest = new XMLHttpRequest();
+        httpRequest.open('POST', `${protocol}${host}/user/login`, true);
+        httpRequest.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        httpRequest.send(`username=${username}&password=${password}`);
+
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState === 4 && httpRequest.status === 200) {
+                let json = JSON.parse(httpRequest.responseText);
+                let token = json.data.token;
+                sessionStorage.setItem("token", token);
+                window.location.reload();
+            } else {
+                loginButton.removeAttribute("loading")
+                loginDialog.removeAttribute("disabled")
+            }
+        };
+    });
+
+    let server = localStorage.getItem("server");
+    if (server === null) {
+        window.open("select-server.html", "_self");
+        const selectServerDialog = document.querySelector(".select-server-dialog")
+        selectServerDialog.open = true;
+    } else {
+        // check server
+        let host = localStorage.getItem("server");
+        let encrypted = localStorage.getItem("encrypted")
+        let protocol;
+        if (encrypted.value === "true") {
+            protocol = "https://"
+        } else {
+            protocol = "http://"
+        }
+        fetch(protocol + host).catch(() => {
+            localStorage.clear(); // remove everything
+            window.location.reload();
+        });
+        let token = sessionStorage.getItem("token");
+        if (token === null) {
+            console.log("Call login");
+            loginDialog.open = true;
+        }
+    }
+</script>
+</body>
+</html>

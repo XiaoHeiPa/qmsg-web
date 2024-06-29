@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" class="mdui-theme-auto">
+<head>
+    <meta charset="UTF-8">
+    <title>QvQ Messenger | Select server</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/mdui@2/mdui.css">
+    <script src="https://unpkg.com/mdui@2/mdui.global.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script>
+        function checkServer() {
+            let textField = document.querySelector(".login-text-field");
+            let value = textField.value;
+            let encrypted = document.querySelector(".is-encrypted")
+            let protocol;
+            if (encrypted.value) {
+                protocol = "https://"
+            } else {
+                protocol = "http://"
+            }
+            fetch(protocol + value).then(() => {
+                localStorage.setItem("server", value);
+                localStorage.setItem("encrypted", encrypted.toString());
+                window.open("index.html", "_self");
+            }).catch(() => {
+                dialog.open = true
+            });
+        }
+    </script>
+</head>
+<body>
+<mdui-dialog class="unreachable-dialog">
+    <h2>Server is unreachable</h2>
+    <p>Please sure that there is a QMessenger backend running on this server.</p>
+    <br>
+    <mdui-button class="unreachable-close">
+        Close
+    </mdui-button>
+</mdui-dialog>
+
+<mdui-snackbar class="encrypt-snackbar" closeable close-on-outside-click>Protocol encryption toggled</mdui-snackbar>
+
+<mdui-card class="login-card" variant="filled" style="width: 600px;height: 400px">
+    <h2 style="text-align: left;padding: 1.2rem">QMessenger Server</h2>
+    <mdui-text-field class="login-text-field" style="width: 50%" label="Server address"
+                     helper="Example: qmsg.dev; Lock Icon: use https/wss" helper-on-focus>
+        <mdui-button-icon slot="icon" icon="dns"></mdui-button-icon>
+        <mdui-button-icon class="is-encrypted" selectable icon="lock" slot="end-icon" onClick="document.querySelector('.encrypt-snackbar').open = true"></mdui-button-icon>
+    </mdui-text-field>
+    <br>
+    <mdui-button end-icon="arrow_forward" onClick="checkServer()">
+        Continue Login
+    </mdui-button>
+    <!--        <mdui-button variant="outlined" end-icon="help">Help</mdui-button>-->
+</mdui-card>
+
+<script>
+    const dialog = document.querySelector(".unreachable-dialog");
+    const closeButton = dialog.querySelector(".unreachable-close");
+
+    closeButton.addEventListener("click", () => {
+        dialog.open = false
+    });
+</script>
+</body>
+</html>
