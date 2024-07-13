@@ -26,9 +26,6 @@
         Login
         <mdui-icon slot="end-icon" name="login"></mdui-icon>
     </mdui-button>
-    <mdui-button href="select-server.html" variant="outlined">
-        Change server
-    </mdui-button>
 </mdui-dialog>
 <mdui-dialog fullscreen class="select-server-dialog">
     <h2>选择服务器</h2>
@@ -49,20 +46,11 @@
     loginButton.addEventListener("click", () => {
         loginButton.setAttribute("loading", "")
         loginDialog.setAttribute("disabled", "")
-        // loginDialog.open = false
-        let host = localStorage.getItem("server");
-        let encrypted = localStorage.getItem("encrypted")
-        let protocol;
-        if (encrypted.value === "true") {
-            protocol = "https://"
-        } else {
-            protocol = "http://"
-        }
         const username = usernameField.value;
         const password = passwordField.value;
 
         let httpRequest = new XMLHttpRequest();
-        httpRequest.open('POST', `${protocol}${host}/user/login`, true);
+        httpRequest.open('POST', "https://backend.lunarclient.top/user/login", true);
         httpRequest.setRequestHeader("Content-type","application/x-www-form-urlencoded");
         httpRequest.send(`username=${username}&password=${password}`);
 
@@ -78,52 +66,18 @@
             }
         };
     });
-
-    let server = localStorage.getItem("server");
-    if (server === null) {
-        window.open("select-server.html", "_self");
-        const selectServerDialog = document.querySelector(".select-server-dialog")
-        selectServerDialog.open = true;
+    let token = sessionStorage.getItem("token");
+    if (token === null) {
+        console.log("Call login");
+        loginDialog.open = true;
     } else {
-        // check server
-        let host = localStorage.getItem("server");
-        let encrypted = localStorage.getItem("encrypted")
-        let protocol;
-        if (encrypted.value === "true") {
-            protocol = "https://"
-        } else {
-            protocol = "http://"
-        }
-        fetch(protocol + host).catch(() => {
-            localStorage.clear(); // remove everything
-            window.location.reload();
-        });
-        let token = sessionStorage.getItem("token");
-        if (token === null) {
-            console.log("Call login");
-            loginDialog.open = true;
-        } else {
-            processMessenger(token, encrypted.value === "true", host)
-        }
+        processMessenger(token)
     }
 
-    function processMessenger(token, encrypted, host) {
-        let protocol;
-        if (encrypted) {
-            protocol = "wss://"
-        } else {
-            protocol = "ws://"
-        }
-        try {
-            let ws = new WebSocket(`${protocol}${token}@${host}/ws/messenger`);
-            ws.onopen(() => {
-                alert("connected")
-            })
-        } catch (e) {
-            localStorage.clear();
-            sessionStorage.clear();
-            window.location.reload();
-        }
+    function processMessenger(token) {
+        let ws = new WebSocket("wss://backend.lunarclient.top/ws/messenger");
+        ws.onopen(() => {
+        })
     }
 </script>
 </body>
