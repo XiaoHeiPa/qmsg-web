@@ -9,6 +9,22 @@
     <title>Register | QMessenger</title>
 </head>
 <body>
-
+<mdui-card class="login-card" variant="filled" style="width: 600px;height: 400px">
+    <h1 style="text-align: left;padding: 1.2rem">Register</h1>
+    <mdui-text-field class="username-text-field" style="width: 50%" label="Username">
+        <mdui-button-icon slot="icon" icon="person"></mdui-button-icon>
+    </mdui-text-field>
+    <br>
+    <mdui-text-field class="password-text-field" style="width: 50%" label="Password" type="password" toggle-password>
+        <mdui-button-icon slot="icon" icon="key"></mdui-button-icon>
+    </mdui-text-field>
+    <br>
+    <mdui-text-field class="invite-code-text-field" style="width: 50%" label="Invite code"
+    helper="邀请码是必须填写的的, 如果你没有邀请码请在GitHub开issue." helper-on-focus>
+        <mdui-button-icon slot="icon" icon="code"></mdui-button-icon>
+    </mdui-text-field>
+    <br>
+    <mdui-button>确认注册</mdui-button><span>&nbsp;</span><mdui-button variant="outlined" href="index.html">登录</mdui-button>
+</mdui-card>
 </body>
 </html>
