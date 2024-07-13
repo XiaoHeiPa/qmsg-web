@@ -24,7 +24,43 @@
         <mdui-button-icon slot="icon" icon="code"></mdui-button-icon>
     </mdui-text-field>
     <br>
-    <mdui-button>确认注册</mdui-button><span>&nbsp;</span><mdui-button variant="outlined" href="index.html">登录</mdui-button>
+    <mdui-button class="btn-confirm">确认注册</mdui-button><span>&nbsp;</span><mdui-button variant="outlined" href="index.html">登录</mdui-button>
 </mdui-card>
+
+<mdui-snackbar class="success-snackbar">注册成功,点击"确认"前往登录</mdui-snackbar>
+<mdui-snackbar class="invalid-code-snackbar">注册失败,请检查邀请码是否有效</mdui-snackbar>
+<mdui-snackbar class="failure-snackbar">注册失败,请检查邀请码是否有效</mdui-snackbar>
+<mdui-snackbar class="failure-snackbar">注册失败,请检查用户名是否被占用</mdui-snackbar>
+
+<script>
+    const btnConfirm = document.querySelector(".btn-confirm");
+    const fieldInviteCode = document.querySelector(".invite-code-text-field");
+    const fieldUsername = document.querySelector(".username-text-field");
+    const fieldPassword = document.querySelector(".password-text-field");
+    const inviteCode = fieldInviteCode.value;
+    const username = fieldUsername.value;
+    const password = fieldPassword.value;
+    const successSnackbar = document.querySelector(".success-snackbar");
+    const invalidInviteCodeSnackbar = document.querySelector(".invalid-code-snackbar")
+    const failureSnackbar = document.querySelector(".failure-snackbar")
+    btnConfirm.addEventListener("click", () => {
+        let xhr = new XMLHttpRequest();
+
+        xhr.open("POST", `https://backend.lunarclient.top/register/${inviteCode}?username=${username}&password=${password}`, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send();
+
+        xhr.onreadystatechange = function () {
+            let data = JSON.parse(this.responseText);
+            if (data.code === 200) {
+                successSnackbar.open = true;
+            } else if (data.code === 404) {
+                invalidInviteCodeSnackbar.open = true;
+            } else {
+                failureSnackbar.open = true
+            }
+        };
+    })
+</script>
 </body>
 </html>
