@@ -37,15 +37,14 @@
     const fieldInviteCode = document.querySelector(".invite-code-text-field");
     const fieldUsername = document.querySelector(".username-text-field");
     const fieldPassword = document.querySelector(".password-text-field");
-    const inviteCode = fieldInviteCode.value;
-    const username = fieldUsername.value;
-    const password = fieldPassword.value;
     const successSnackbar = document.querySelector(".success-snackbar");
     const invalidInviteCodeSnackbar = document.querySelector(".invalid-code-snackbar")
     const failureSnackbar = document.querySelector(".failure-snackbar")
     btnConfirm.addEventListener("click", () => {
         let xhr = new XMLHttpRequest();
-
+        const inviteCode = fieldInviteCode.value;
+        const username = fieldUsername.value;
+        const password = fieldPassword.value;
         xhr.open("POST", `https://backend.lunarclient.top/register/${inviteCode}?username=${username}&password=${password}`, true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.send();
