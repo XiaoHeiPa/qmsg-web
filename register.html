@@ -9,15 +9,20 @@
     <title>Register | QMessenger</title>
 </head>
 <body>
-<mdui-card class="login-card" variant="filled" style="width: 600px;height: 400px">
+<mdui-card class="login-card" variant="filled" style="width: 600px;height: 500px">
     <h1 style="text-align: left;padding: 1.2rem">Register</h1>
     <mdui-text-field class="username-text-field" style="width: 50%" label="Username">
         <mdui-button-icon slot="icon" icon="person"></mdui-button-icon>
     </mdui-text-field>
     <br>
+    <mdui-text-field class="email-text-field" style="width: 50%" label="Email">
+        <mdui-button-icon slot="icon" icon="mail"></mdui-button-icon>
+    </mdui-text-field>
+    <br>
     <mdui-text-field class="password-text-field" style="width: 50%" label="Password" type="password" toggle-password>
         <mdui-button-icon slot="icon" icon="key"></mdui-button-icon>
     </mdui-text-field>
+    <br>
     <br>
     <mdui-text-field class="invite-code-text-field" style="width: 50%" label="Invite code"
     helper="邀请码是必须填写的的, 如果你没有邀请码请在GitHub开issue." helper-on-focus>
@@ -37,6 +42,7 @@
     const fieldInviteCode = document.querySelector(".invite-code-text-field");
     const fieldUsername = document.querySelector(".username-text-field");
     const fieldPassword = document.querySelector(".password-text-field");
+    const fieldEmail = document.querySelector(".eamil-text-field");
     const successSnackbar = document.querySelector(".success-snackbar");
     const invalidInviteCodeSnackbar = document.querySelector(".invalid-code-snackbar")
     const failureSnackbar = document.querySelector(".failure-snackbar")
@@ -45,7 +51,8 @@
         const inviteCode = fieldInviteCode.value;
         const username = fieldUsername.value;
         const password = fieldPassword.value;
-        xhr.open("POST", `https://backend.lunarclient.top/user/register/${inviteCode}?username=${username}&password=${password}`, true);
+        const email = fieldEmail.value;
+        xhr.open("POST", `https://backend.lunarclient.top/user/register/${inviteCode}?username=${username}&password=${password}&email=${email}`, true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.send();
 
